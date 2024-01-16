@@ -7,8 +7,16 @@ import (
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Home Area")
+		w.Write([]byte("Hello, HTTPS!"))
 	})
 
-	http.ListenAndServe(":8082", nil)
+	certPath := "/app/ssl/cert.pem"
+	keyPath := "/app/ssl/key.pem"
+
+	fmt.Printf("Server running on https://localhost\n")
+
+	err := http.ListenAndServeTLS(":8082", certPath, keyPath, nil)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+	}
 }
